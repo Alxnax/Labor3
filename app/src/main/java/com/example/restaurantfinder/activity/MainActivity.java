@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
+import android.content.Intent;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,19 +38,22 @@ public class MainActivity extends AppCompatActivity {
     Button button_add;
     EditText input_restaurant_name;
 
+    private static final int REQUEST_CODE_ADD_RESTAURANT = 100;
+    private static final int REQUEST_CODE_EDIT_RESTAURANT = 101;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-        input_restaurant_name = findViewById(R.id.editTextRestaurantName);
+        /*input_restaurant_name = findViewById(R.id.editTextRestaurantName);
         button_add = findViewById(R.id.buttonAdd);
 
         button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String restaurant_string = input_restaurant_name.getText().toString();
+                /*String restaurant_string = input_restaurant_name.getText().toString();
 
                 Restaurant new_restaurant = new Restaurant();
                 new_restaurant.setRestaurants(restaurant_string);
@@ -59,8 +63,10 @@ public class MainActivity extends AppCompatActivity {
                 input_restaurant_name.getText().clear();
 
                 Toast.makeText(MainActivity.this, "Restaurant added", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, RestaurantDetailsActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_ADD_RESTAURANT);
             }
-        });
+        });*/
 
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -92,15 +98,15 @@ public class MainActivity extends AppCompatActivity {
         }).attachToRecyclerView(recyclerView);
 
 
-        /*adapter.setOnItemClickListener(new RestaurantAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new RestaurantAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Restaurant restaurant) {
-                Intent intent = new Intent(MainActivity.this, AddEditRestaurantActivity.class);
-                intent.putExtra(AddEditRestaurantActivity.EXTRA_ID, restaurant.getId());
-                intent.putExtra(AddEditRestaurantActivity.EXTRA_QUOTE, restaurant.getRestaurants());
-                startActivityForResult(intent, REQUEST_CODE_EDIT_QUOTE);
+                Intent intent = new Intent(MainActivity.this, RestaurantDetailsActivity.class);
+                intent.putExtra(RestaurantDetailsActivity.EXTRA_ID, restaurant.getId());
+                intent.putExtra(RestaurantDetailsActivity.EXTRA_RESTAURANT, restaurant.getRestaurants());
+                startActivityForResult(intent, REQUEST_CODE_EDIT_RESTAURANT);
             }
-        });*/
+        });
     }
 
     @Override
@@ -120,17 +126,21 @@ public class MainActivity extends AppCompatActivity {
             case R.id.recreate_db:
                 RestaurantsDataBase.getInstance(this).reCreateDB();
                 return true;
+            case R.id.add_restaurant:
+                Intent intent = new Intent(MainActivity.this, RestaurantDetailsActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_ADD_RESTAURANT);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    /*@Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE_ADD_QUOTE && resultCode == RESULT_OK) {
-            String retrievedRestaurant = data.getStringExtra(AddEditRestaurantActivity.EXTRA_QUOTE);
+        if (requestCode == REQUEST_CODE_ADD_RESTAURANT && resultCode == RESULT_OK) {
+            String retrievedRestaurant = data.getStringExtra(RestaurantDetailsActivity.EXTRA_RESTAURANT);
 
             Restaurant restaurant = new Restaurant();
             restaurant.setRestaurants(retrievedRestaurant);
@@ -139,15 +149,15 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Restaurant saved", Toast.LENGTH_SHORT).show();
 
-        } else if (requestCode == REQUEST_CODE_EDIT_QUOTE && resultCode == RESULT_OK) {
-            int id = data.getIntExtra(AddEditRestaurantActivity.EXTRA_ID, -1);
+        } else if (requestCode == REQUEST_CODE_EDIT_RESTAURANT && resultCode == RESULT_OK) {
+            int id = data.getIntExtra(RestaurantDetailsActivity.EXTRA_ID, -1);
 
             if (id == -1) {
                 Toast.makeText(this, "Restaurant can't be updated", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            String retrievedRestaurant = data.getStringExtra(AddEditRestaurantActivity.EXTRA_QUOTE);
+            String retrievedRestaurant = data.getStringExtra(RestaurantDetailsActivity.EXTRA_RESTAURANT);
 
             Restaurant restaurant = new Restaurant();
             restaurant.setRestaurants(retrievedRestaurant);
@@ -158,5 +168,5 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Restaurant not saved", Toast.LENGTH_SHORT).show();
         }
-    }*/
+    }
 }

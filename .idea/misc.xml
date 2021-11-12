@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/alena/AndroidStudioProjects/RestaurantFinder/app/src/main/res/drawable-v24/ic_restaurants.xml" value="0.221875" />
         <entry key="..\:/Users/alena/AndroidStudioProjects/RestaurantFinder/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/alena/AndroidStudioProjects/RestaurantFinder/app/src/main/res/layout/activity_restaurant_detail.xml" value="0.3671875" />
         <entry key="..\:/Users/alena/AndroidStudioProjects/RestaurantFinder/app/src/main/res/layout/restaurant_list_item.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/alena/AndroidStudioProjects/RestaurantFinder/app/src/main/res/menu/menu_delete_all_quotes.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/alena/AndroidStudioProjects/RestaurantFinder/app/src/main/res/menu/menu_delete_all_restaurants.xml" value="0.20572916666666666" />

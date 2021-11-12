@@ -10,4 +10,9 @@
         android:id="@+id/recreate_db"
         android:title="Recreate Database"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/add_restaurant"
+        android:title="Add restaurant"
+        app:showAsAction="never" />
 </menu>
