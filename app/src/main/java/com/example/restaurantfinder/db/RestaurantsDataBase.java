@@ -63,15 +63,19 @@ We create our database in form of a static singleton with the databaseBuilder, w
 
             Restaurant restaurantOne = new Restaurant();
             restaurantOne.setRestaurants("Restaurant 1");
+            restaurantOne.setRestaurantOrt("Konstanz");
 
             Restaurant restaurantTwo = new Restaurant();
             restaurantTwo.setRestaurants("Restaurant 2");
+            restaurantTwo.setRestaurantOrt("Konstanz");
 
             Restaurant restaurantThree = new Restaurant();
             restaurantThree.setRestaurants("Restaurant 3");
+            restaurantThree.setRestaurantOrt("Konstanz");
 
             Restaurant restaurantFour = new Restaurant();
             restaurantFour.setRestaurants("Restaurant 4");
+            restaurantFour.setRestaurantOrt("Stuttgart");
 
             restaurantsDao.insert(restaurantOne, restaurantTwo, restaurantThree, restaurantFour);
 

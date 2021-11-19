@@ -19,6 +19,10 @@ public class Restaurant {
     @NonNull
     public String restaurants;
 
+    @ColumnInfo(name = "ort")
+    @NonNull
+    public String restaurant_ort;
+
     public int getId() {
         return id;
     }
@@ -34,5 +38,14 @@ public class Restaurant {
 
     public void setRestaurants(@NonNull String restaurants) {
         this.restaurants = restaurants;
+    }
+
+    @NonNull
+    public String getRestaurantOrt() {
+        return restaurant_ort;
+    }
+
+    public void setRestaurantOrt(@NonNull String restaurant_ort) {
+        this.restaurant_ort = restaurant_ort;
     }
 }

@@ -36,9 +36,10 @@ import android.util.Log;
 
 public class RestaurantDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_ID = "extra_id";
-    public static final String EXTRA_RESTAURANT = "extra_quote";
+    public static final String EXTRA_RESTAURANT = "extra_restaurant";
+    public static final String EXTRA_RESTAURANT_ORT = "extra_restaurant_ort";
 
-    EditText input_edit_restaurant_name;
+    EditText input_edit_restaurant_name, input_edit_restaurant_ort;
     Button button_save_changes;
     TextView title;
 
@@ -47,6 +48,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
         input_edit_restaurant_name = findViewById(R.id.editTextTextRestaurantName);
+        input_edit_restaurant_ort = findViewById(R.id.editTextTextRestaurantOrt);
         button_save_changes = findViewById(R.id.buttonSaveChanges);
         title = findViewById(R.id.textViewTitle);
         //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
@@ -56,6 +58,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
             //setTitle("Restaurant upgraden");
             title.setText("Restaurant ändern");
             input_edit_restaurant_name.setText(intent.getStringExtra(EXTRA_RESTAURANT));
+            input_edit_restaurant_ort.setText(intent.getStringExtra(EXTRA_RESTAURANT_ORT));
         } else {
             //setTitle("Restaurant ändern");
             title.setText("Restaurant hinzufügen");
@@ -65,6 +68,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String restaurant = input_edit_restaurant_name.getText().toString();
+                String restaurant_ort = input_edit_restaurant_ort.getText().toString();
 
                 if (TextUtils.isEmpty(restaurant)) {
                     Toast.makeText(RestaurantDetailsActivity.this, "Please enter some Restaurant to be added", Toast.LENGTH_SHORT).show();
@@ -73,6 +77,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
                 Intent data = new Intent();
                 data.putExtra(EXTRA_RESTAURANT, restaurant);
+                data.putExtra(EXTRA_RESTAURANT_ORT, restaurant_ort);
 
                 //This -1 is because if the database already have the value or not
                 //in simple terms we are checking whether the value should be updated or should added new
@@ -88,7 +93,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
             }
         });
     }
-
+    /*
     private void saveChanges() {
         String restaurant = input_edit_restaurant_name.getText().toString();
 
@@ -110,7 +115,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         setResult(RESULT_OK, data);
         finish();
     }
-    /*
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();

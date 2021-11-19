@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, RestaurantDetailsActivity.class);
                 intent.putExtra(RestaurantDetailsActivity.EXTRA_ID, restaurant.getId());
                 intent.putExtra(RestaurantDetailsActivity.EXTRA_RESTAURANT, restaurant.getRestaurants());
+                intent.putExtra(RestaurantDetailsActivity.EXTRA_RESTAURANT_ORT, restaurant.getRestaurantOrt());
                 startActivityForResult(intent, REQUEST_CODE_EDIT_RESTAURANT);
             }
         });
@@ -141,9 +142,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_ADD_RESTAURANT && resultCode == RESULT_OK) {
             String retrievedRestaurant = data.getStringExtra(RestaurantDetailsActivity.EXTRA_RESTAURANT);
+            String retrievedRestaurantOrt = data.getStringExtra(RestaurantDetailsActivity.EXTRA_RESTAURANT_ORT);
 
             Restaurant restaurant = new Restaurant();
             restaurant.setRestaurants(retrievedRestaurant);
+            restaurant.setRestaurantOrt(retrievedRestaurantOrt);
 
             restaurantsViewModel.insert(restaurant);
 
@@ -158,9 +161,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             String retrievedRestaurant = data.getStringExtra(RestaurantDetailsActivity.EXTRA_RESTAURANT);
+            String retrievedRestaurantOrt = data.getStringExtra(RestaurantDetailsActivity.EXTRA_RESTAURANT_ORT);
 
             Restaurant restaurant = new Restaurant();
             restaurant.setRestaurants(retrievedRestaurant);
+            restaurant.setRestaurantOrt(retrievedRestaurantOrt);
             restaurant.setId(id);
             restaurantsViewModel.update(restaurant);
 
