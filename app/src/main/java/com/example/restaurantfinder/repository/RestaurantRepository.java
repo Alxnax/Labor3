@@ -7,18 +7,30 @@ import android.os.AsyncTask;
 import com.example.restaurantfinder.dao.RestaurantsDao;
 import com.example.restaurantfinder.db.RestaurantsDataBase;
 import com.example.restaurantfinder.model.Restaurant;
+import com.example.restaurantfinder.webservice.User;
+import com.example.restaurantfinder.webservice.Webservice;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 
 public class RestaurantRepository {
 
     private RestaurantsDao restaurantsDao;
     private LiveData<List<Restaurant>> allRestaurants;
+    private Webservice webservice_objekt;
 
     public RestaurantRepository(Application application) {
         RestaurantsDataBase dataBase = RestaurantsDataBase.getInstance(application);
         restaurantsDao = dataBase.restaurantsDao();
         allRestaurants = restaurantsDao.getAllRestaurants();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://reqres.in/api/")
+                .build();
+        webservice_objekt = retrofit.create(Webservice.class);
     }
 
     public void insert(Restaurant restaurant) {
@@ -38,7 +50,36 @@ public class RestaurantRepository {
     }
 
     public LiveData<List<Restaurant>> getAllRestaurants() {
+        refreshAllRestaurants();
         return allRestaurants;
+    }
+
+
+    public void refreshAllRestaurants() {
+        System.out.println("HIER------------------------------------");
+        // if DB leer aus Webservice laden
+        if (true){
+            try {
+                // https://reqres.in/api/users?page=2
+                Response<List<User>> response = webservice_objekt.getUser().execute();
+                List users = response.body();
+                /*for (int i = 0; i < users.size(); i++){
+                    Restaurant restaurant = new Restaurant();
+                    String retrievedRestaurant = users[i].fist_name; // first_name
+                    String retrievedRestaurantOrt = ""; // last_name
+                    restaurant.setRestaurants(retrievedRestaurant);
+                    restaurant.setRestaurantOrt(retrievedRestaurantOrt);
+
+                    insert(restaurant);
+                }*/
+                System.out.println("------------------------------------");
+                System.out.println(response.body());
+                System.out.println(users);
+            } catch (Exception e) {
+                e.printStackTrace();
+            };
+        };
+
     }
 
     private static class InsertRestaurantAsyncTask extends AsyncTask<Restaurant, Void, Void> {
