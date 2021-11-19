@@ -8,13 +8,26 @@ import com.example.restaurantfinder.dao.RestaurantsDao;
 import com.example.restaurantfinder.db.RestaurantsDataBase;
 import com.example.restaurantfinder.model.Restaurant;
 import com.example.restaurantfinder.webservice.User;
+import com.example.restaurantfinder.webservice.UserData;
 import com.example.restaurantfinder.webservice.Webservice;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class RestaurantRepository {
@@ -22,15 +35,19 @@ public class RestaurantRepository {
     private RestaurantsDao restaurantsDao;
     private LiveData<List<Restaurant>> allRestaurants;
     private Webservice webservice_objekt;
+    private Executor executor;
 
+    @Inject
     public RestaurantRepository(Application application) {
         RestaurantsDataBase dataBase = RestaurantsDataBase.getInstance(application);
         restaurantsDao = dataBase.restaurantsDao();
         allRestaurants = restaurantsDao.getAllRestaurants();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://reqres.in/api/")
+                .baseUrl("https://reqres.in/")
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
         webservice_objekt = retrofit.create(Webservice.class);
+        //executor =
     }
 
     public void insert(Restaurant restaurant) {
@@ -58,27 +75,34 @@ public class RestaurantRepository {
     public void refreshAllRestaurants() {
         System.out.println("HIER------------------------------------");
         // if DB leer aus Webservice laden
-        if (true){
-            try {
-                // https://reqres.in/api/users?page=2
-                Response<List<User>> response = webservice_objekt.getUser().execute();
-                List users = response.body();
-                /*for (int i = 0; i < users.size(); i++){
-                    Restaurant restaurant = new Restaurant();
-                    String retrievedRestaurant = users[i].fist_name; // first_name
-                    String retrievedRestaurantOrt = ""; // last_name
-                    restaurant.setRestaurants(retrievedRestaurant);
-                    restaurant.setRestaurantOrt(retrievedRestaurantOrt);
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-                    insert(restaurant);
-                }*/
-                System.out.println("------------------------------------");
-                System.out.println(response.body());
-                System.out.println(users);
-            } catch (Exception e) {
-                e.printStackTrace();
-            };
-        };
+        executorService.execute(new Runnable() {
+            public void run() {
+                System.out.println("Asynchronous task");
+                if (true){
+                    try {
+                        Response<UserData> response = webservice_objekt.getUser().execute();
+                        Restaurant restaurant = new Restaurant();
+                        String retrievedRestaurant = response.body().data.first_name; // first_name
+                        String retrievedRestaurantOrt = response.body().data.last_name;; // last_name
+                        restaurant.setRestaurants(retrievedRestaurant);
+                        restaurant.setRestaurantOrt(retrievedRestaurantOrt);
+
+                        insert(restaurant);
+                        System.out.println("------------------------------------");
+                        System.out.println(response.body());
+                        //System.out.println(users);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    };
+                };
+            }
+        });
+
+        executorService.shutdown();
+
+
 
     }
 
